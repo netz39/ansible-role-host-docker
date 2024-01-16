@@ -1,0 +1,85 @@
+# This file is a mash-up of:
+#   https://github.com/geerlingguy/ansible-role-docker/blob/master/tasks/docker-compose.yml
+#   https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-debian-9
+#   and our own stuff …
+---
+# tasks file for host-docker
+- name: Gather package facts
+  package_facts:
+    manager: "auto"
+
+- name: Exit if docker.io is installed
+  fail:
+    msg: "Please remove docker.io (Debian vanilla docker package) first!"
+  when: "'docker.io' in ansible_facts.packages"
+
+- name: Install Docker APT deps
+  package:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - apt-transport-https
+      - ca-certificates
+      - gnupg2
+      - software-properties-common
+
+- name: add Docker apt-key
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+
+- name: add Docker's APT repository
+  ansible.builtin.template:
+    src: templates/docker.list.j2
+    dest: /etc/apt/sources.list.d/docker.list
+  register: apt_repo
+
+- name: Update package cache  # noqa 503
+  ansible.builtin.apt:
+    update_cache: true
+  when: apt_repo.changed
+
+- name: install Docker
+  package:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - docker-ce
+      - python3-docker
+
+- name: Set docker configuration
+  template:
+    src: templates/daemon.json.j2
+    dest: /etc/docker/daemon.json
+    mode: "0644"
+  notify: restart docker
+
+- name: Check current docker-compose version.
+  command: docker-compose --version
+  register: docker_compose_current_version
+  changed_when: false
+  failed_when: false
+
+- name: Delete existing docker-compose version if it's different.
+  file:
+    path: "{{ docker_compose_path }}"
+    state: absent
+  when: >
+    docker_compose_current_version.stdout is defined
+    and docker_compose_version not in docker_compose_current_version.stdout
+
+- name: Install Docker Compose (if configured).
+  get_url:
+    url: https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-Linux-x86_64
+    dest: "{{ docker_compose_path }}"
+    mode: "0755"
+
+- name: Place admin users in docker group
+  user:
+    name: "{{ item.logname }}"
+    groups: [docker]
+    append: yes
+  when: item.docker
+  with_items: "{{ users }}"

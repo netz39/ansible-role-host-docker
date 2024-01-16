@@ -1,0 +1,13 @@
+{
+{% if docker_v6_cidr %}
+    "ipv6": true,
+    "fixed-cidr-v6": "{{ docker_v6_cidr }}",
+{% endif %}
+    "exec-opts": ["native.cgroupdriver=systemd"],
+    "log-driver": "json-file",
+        "log-opts": {
+            "max-size": "100m"
+        },
+    "data-root": "{{ docker_data_root }}",
+    "storage-driver": "{{ docker_storage_driver }}"
+}
