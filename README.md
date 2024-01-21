@@ -5,7 +5,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # Host Docker
 
-<!-- TODO Get a badge from https://api.reuse.software/register once this repo is public. -->
+[![REUSE status](https://api.reuse.software/badge/github.com/netz39/ansible-role-host-docker)](https://api.reuse.software/info/github.com/netz39/ansible-role-host-docker)
 ![license MIT](https://img.shields.io/badge/license-MIT-informational)
 
 Ansible Role for installing the Docker runtime environment on your (Debian) host.
