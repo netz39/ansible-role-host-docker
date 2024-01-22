@@ -41,7 +41,7 @@
     mode: '0644'
   register: apt_repo
 
-- name: Update package cache  # noqa 503
+- name: Update package cache  # noqa: no-handler
   ansible.builtin.apt:
     update_cache: true
   when: apt_repo.changed
