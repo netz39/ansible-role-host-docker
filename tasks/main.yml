@@ -27,12 +27,12 @@
       - gnupg2
       - software-properties-common
 
-- name: add Docker apt-key
+- name: Add Docker apt-key
   ansible.builtin.apt_key:
     url: https://download.docker.com/linux/debian/gpg
     state: present
 
-- name: add Docker's APT repository
+- name: Add Docker's APT repository
   ansible.builtin.template:
     src: templates/docker.list.j2
     dest: /etc/apt/sources.list.d/docker.list
@@ -43,7 +43,7 @@
     update_cache: true
   when: apt_repo.changed
 
-- name: install Docker
+- name: Install Docker
   ansible.builtin.package:
     name: "{{ packages }}"
     state: present
@@ -57,7 +57,7 @@
     src: templates/daemon.json.j2
     dest: /etc/docker/daemon.json
     mode: "0644"
-  notify: restart docker
+  notify: Restart docker
 
 - name: Check current docker-compose version.
   ansible.builtin.command: docker-compose --version
