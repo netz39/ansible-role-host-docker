@@ -30,6 +30,9 @@ Ansible Role for installing the Docker runtime environment on your (Debian) host
 This role can be installed through your *requirements.yml*, either from
 [Ansible Galaxy](https://galaxy.ansible.com/) or through the Git repo.
 
+Please note that `docker-compose` is now a part of the Docker client and
+available through the `docker compose` command.
+
 ## Role Variables
 
 *A description of the settable variables for this role should go here,
