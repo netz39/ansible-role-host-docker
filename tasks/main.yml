@@ -53,6 +53,7 @@
   vars:
     packages:
       - docker-ce
+      - docker-compose-plugin
       - python3-docker
 
 - name: Set docker configuration
@@ -61,26 +62,6 @@
     dest: /etc/docker/daemon.json
     mode: "0644"
   notify: Restart docker
-
-- name: Check current docker-compose version.
-  ansible.builtin.command: docker-compose --version
-  register: docker_compose_current_version
-  changed_when: false
-  failed_when: false
-
-- name: Delete existing docker-compose version if it's different.
-  ansible.builtin.file:
-    path: "{{ docker_compose_path }}"
-    state: absent
-  when: >
-    docker_compose_current_version.stdout is defined
-    and docker_compose_version not in docker_compose_current_version.stdout
-
-- name: Install Docker Compose (if configured).
-  ansible.builtin.get_url:
-    url: https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-Linux-x86_64
-    dest: "{{ docker_compose_path }}"
-    mode: "0755"
 
 - name: Place admin users in docker group
   ansible.builtin.user:
