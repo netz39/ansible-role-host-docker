@@ -53,6 +53,7 @@
   vars:
     packages:
       - docker-ce
+      - docker-compose-plugin
       - python3-docker
 
 - name: Set docker configuration
