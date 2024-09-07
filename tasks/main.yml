@@ -110,3 +110,10 @@
     append: yes
   when: (item.docker is defined) and item.docker
   with_items: "{{ users }}"
+
+- name: Ensure that docker image prune cron job is present.
+  ansible.builtin.cron:
+    name: docker image prune
+    special_time: weekly
+    user: root
+    job: "docker image prune --all --force"
