@@ -68,5 +68,5 @@
     name: "{{ item.logname }}"
     groups: [docker]
     append: yes
-  when: item.docker
+  when: (item.docker is defined) and item.docker
   with_items: "{{ users }}"
