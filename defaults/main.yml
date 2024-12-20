@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 ---
 # defaults file for host-docker
+docker_apt_key_url: "https://download.docker.com/linux/debian/gpg"
 docker_data_root: "/var/lib/docker"
 docker_storage_driver: "overlay2"
 docker_v6_cidr: ""
