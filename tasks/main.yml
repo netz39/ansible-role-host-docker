@@ -56,6 +56,13 @@
         mode: '0644'
       register: apt_repo
 
+    # that key was created in 2017 and was still in use in 2024,
+    # we most probably need to remove this one key only
+    - name: Remove key from deprecated apt-key storage
+      ansible.builtin.apt_key:
+        id: 0x9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+        state: absent
+
 - name: Optionally get and check GPG fingerprint of apt key file
   when: docker_apt_key_fpr is defined   # no need to get the fpr if user does not want to check it anyways
   block:
