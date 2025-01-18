@@ -117,3 +117,4 @@
     special_time: weekly
     user: root
     job: "docker image prune --all --force"
+    disabled: "{{ not docker_cron_image_prune }}"
