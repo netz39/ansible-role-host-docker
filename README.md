@@ -23,38 +23,106 @@ Ansible Role for installing the Docker runtime environment on your (Debian) host
 
 ## Requirements
 
-*nothing special*
+The role has been tested on Debian and is expected to work on Ubuntu.
+Other distribution have not been tested.
 
 ## Install
 
-This role can be installed through your *requirements.yml*, either from
-[Ansible Galaxy](https://galaxy.ansible.com/) or through the Git repo.
+This role can be installed through your *requirements.yml*.
 
 Please note that `docker-compose` is now a part of the Docker client and
 available through the `docker compose` command.
 
+Example:
+
+```yaml
+---
+roles:
+  - name: netz39.host_docker
+    src: git+https://github.com/netz39/ansible-role-host-docker.git
+    version: v0.2.1
+```
+
 ## Role Variables
 
-*A description of the settable variables for this role should go here,
-including any variables that are in defaults/main.yml, vars/main.yml,
-and any variables that can/should be set via parameters to the role.
-Any variables that are read from other roles and/or the global scope
-(ie. hostvars, group vars, etc.) should be mentioned here as well.*
+You can go with just the defaults.
+
+### Optional Variables
+
+* `docker_apt_key_fpr`:
+    * Default: *none*
+      If this variable is not set, **no** OpenPGP key fingerprint is checked!
+    * Description: Set the fingerprint of the debian repo signing key
+      here to notice signing key changes.
+* `docker_apt_key_url`:
+    * Default: https://download.docker.com/linux/debian/gpg
+    * Description: Address to download the OpenPGP key, which is used to
+      sign the third party apt repo.
+* `docker_apt_keyrings_dir`:
+    * Default: */etc/apt/keyrings*
+    * Description: Directory to put the downloaded OpenPGP file into.
+      Default is Debian standard path for such keys.
+      Can be left on default in almost all cases.
+* `docker_apt_uri`:
+    * Default: https://download.docker.com/linux/debian
+    * Description: Address of the third party apt repo to download
+      Debian packages from.
+      You might want to set this to the address of a local apt proxy
+      like *approx*, *apt-cacher* or the like.
+* `docker_cron_image_prune`:
+    * Default: `false`
+    * Description: Cleanup old images, which are not used anymore.
+      A cronjob is created which calls docker's image prune function.
+* `docker_data_root`:
+    * Default: */var/lib/docker*
+    * Description: Persistent data directory where docker puts
+      containers, images, volumes, etc.
+      See [Daemon data directory](https://docs.docker.com/engine/daemon/#daemon-data-directory)
+      in docker documentation for details.
+      Often set to a separate volume which is not the root volume of
+      the machine docker is installed to.
+* `docker_storage_driver`:
+    * Default: overlay2
+    * Description: See [Select a storage driver](https://docs.docker.com/engine/storage/drivers/select-storage-driver/)
+      in docker documentation for detailed description.
+* `docker_v6_cidr`:
+    * Default: *empty*
+    * Description: *tbd*
 
 ## Dependencies
 
-*A list of other roles hosted on Galaxy should go here, plus any details
-in regards to parameters that may need to be set for other roles, or
-variables that are used from other roles.*
+No external dependencies.
+Tested with ansible 2.14.18 on Debian GNU/Linux 12 (bookworm).
 
 ## Example Playbook
 
-*Including an example of how to use your role (for instance, with
-variables passed in as parameters) is always nice for users too:*
+### Minimal Example
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```yaml
+---
+- hosts: docker_host
+  become: true
+
+  roles:
+    - role: netz39.host_docker
+```
+
+### Example with Common Options
+
+```yaml
+---
+- hosts: miraculix
+  become: true
+
+  roles:
+    - role: netz39.host_docker
+      vars:
+        docker_apt_uri: "http://deb.example.internal:9999/docker"
+        docker_apt_key_url: "{{ docker_apt_uri }}/gpg"
+        docker_apt_key_fpr: "9DC858229FC7DD38854AE2D88D81803C0EBFCD88"
+        docker_data_root: "/srv/docker"
+        docker_cron_image_prune: true
+```
 
 ## Contributing
 
@@ -71,5 +139,6 @@ unless noted differently.
 
 Notable amount of contributions by (in alphabetic order):
 
+- Alexander Dahl ([@LeSpocky](https://github.com/LeSpocky/))
 - David ([@24367dfa](https://github.com/24367dfa))
 - Stefan Haun ([@penguineer](https://github.com/penguineer))
