@@ -87,7 +87,8 @@ You can go with just the defaults.
       in docker documentation for detailed description.
 * `docker_v6_cidr`:
     * Default: *empty*
-    * Description: *tbd*
+    * Description: Enable IPv6 for the docker default network and set
+      the given CIDR.
 
 ## Dependencies
 
@@ -122,6 +123,7 @@ Tested with ansible 2.14.18 on Debian GNU/Linux 12 (bookworm).
         docker_apt_key_fpr: "9DC858229FC7DD38854AE2D88D81803C0EBFCD88"
         docker_data_root: "/srv/docker"
         docker_cron_image_prune: true
+        docker_v6_cidr: "2001:db8:1::/64"
 ```
 
 ## Contributing
