@@ -71,7 +71,7 @@ You can go with just the defaults.
       like *approx*, *apt-cacher* or the like.
 * `docker_cron_image_prune`:
     * Default: `false`
-    * Description: Cleanup old images, which are not used anymore.
+    * Description: Cleanup old images without a container reference.
       A cronjob is created which calls docker's image prune function.
 * `docker_data_root`:
     * Default: */var/lib/docker*
