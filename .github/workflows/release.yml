@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2025 Netz39 Administrators <admin@netz39.de>
+# SPDX-License-Identifier: MIT
+---
 name: Create Release
 
 on:
