@@ -26,6 +26,10 @@ Ansible Role for installing the Docker runtime environment on your (Debian) host
 The role has been tested on Debian and is expected to work on Ubuntu.
 Other distribution have not been tested.
 
+If your target machine has Python 3.12 or later, you need ansible 2.16
+or later, otherwise downloading the apt key fails (see
+[#17](https://github.com/netz39/ansible-role-host-docker/issues/17)).
+
 ## Install
 
 This role can be installed through your *requirements.yml*.
