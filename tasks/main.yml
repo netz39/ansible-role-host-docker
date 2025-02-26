@@ -16,6 +16,16 @@
     msg: "Please remove docker.io (Debian vanilla docker package) first!"
   when: "'docker.io' in ansible_facts.packages"
 
+- name: Exit if target python does not match host ansible
+  ansible.builtin.fail:
+    msg: >
+      "Target machine has python {{ ansible_python_version }},
+      but your host still runs ansible {{ ansible_version.full }}.
+      Please update to ansible 2.16 or later!"
+  when: (ansible_version.full is version('2.16', '<')) and
+        (ansible_python_version is version('3.12', '>=')) and
+        (docker_apt_key_url is match('https://'))
+
 - name: Install Docker APT deps
   ansible.builtin.package:
     name: "{{ packages }}"
