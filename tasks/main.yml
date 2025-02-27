@@ -126,5 +126,5 @@
     name: docker image prune
     special_time: weekly
     user: root
-    job: "docker image prune --all --force"
+    job: "docker image prune --all --force | logger -t {{ docker_cron_image_prune_syslog_topic }}"
     disabled: "{{ not docker_cron_image_prune }}"
