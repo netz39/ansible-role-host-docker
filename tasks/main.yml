@@ -121,10 +121,4 @@
   when: (item.docker is defined) and item.docker
   with_items: "{{ users }}"
 
-- name: Ensure that docker image prune cron job is present.
-  ansible.builtin.cron:
-    name: docker image prune
-    special_time: weekly
-    user: root
-    job: "docker image prune --all --force | logger -t {{ docker_cron_image_prune_syslog_topic }}"
-    disabled: "{{ not docker_cron_image_prune }}"
+- include_tasks: docker_image_prune.yml
