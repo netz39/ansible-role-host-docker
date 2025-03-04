@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: 2025 Stefan Haun <tux@netz39.de>
+# SPDX-License-Identifier: MIT
+
+[Unit]
+Description=Timer to run Docker Prune
+
+[Timer]
+OnCalendar=weekly
+Persistent=true
+
+[Install]
+WantedBy=timers.target

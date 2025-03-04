@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: 2025 Stefan Haun <tux@netz39.de>
+# SPDX-License-Identifier: MIT
+
+[Unit]
+Description=Prune unused Docker images
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/docker image prune --all --force
