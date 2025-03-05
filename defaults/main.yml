@@ -7,8 +7,7 @@
 docker_apt_key_url: "https://download.docker.com/linux/debian/gpg"
 docker_apt_keyrings_dir: "/etc/apt/keyrings"
 docker_apt_uri: "https://download.docker.com/linux/debian"
-docker_cron_image_prune: false  # enable/disable cronjob for regular automatic image cleanup
-docker_cron_image_prune_syslog_topic: "docker-prune"
+docker_image_prune: false  # enable/disable cronjob for regular automatic image cleanup
 docker_data_root: "/var/lib/docker"
 docker_storage_driver: "overlay2"
 docker_v6_cidr: ""

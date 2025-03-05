@@ -1,0 +1,42 @@
+# SPDX-FileCopyrightText: 2025 Stefan Haun <tux@netz39.de>
+# SPDX-License-Identifier: MIT
+---
+
+- name: Install Docker image-prune systemd unit, if enabled
+  when: docker_image_prune
+  block:
+    - name: Copy docker-image-prune.service file
+      ansible.builtin.copy:
+        src: files/docker-image-prune.service
+        dest: /etc/systemd/system/docker-image-prune.service
+        mode: "0644"
+      notify: Reload systemd
+
+    - name: Copy docker-image-prune.timer file
+      ansible.builtin.copy:
+        src: files/docker-image-prune.timer
+        dest: /etc/systemd/system/docker-image-prune.timer
+        mode: "0644"
+      notify: Reload systemd
+
+    - name: Enable and start docker-prune.timer
+      ansible.builtin.systemd:
+        name: docker-image-prune.timer
+        enabled: yes
+        state: started
+
+
+
+# Note: This check can go away in a few releases
+
+- name: Check for old docker image prune cron job
+  ansible.builtin.shell: "crontab -l | grep 'docker image prune --all --force'"
+  register: cron_check
+  ignore_errors: true
+  failed_when: false
+  changed_when: false
+
+- name: Print warning about old cron job
+  ansible.builtin.debug:
+    msg: "Warning: Old docker image prune cron job found. Please remove it manually using 'sudo crontab -e' and delete the line containing 'docker image prune --all --force'."
+  when: cron_check.rc == 0
