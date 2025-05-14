@@ -8,4 +8,4 @@ After=docker.service
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/docker image prune --all --force
+ExecStart=/usr/bin/docker image prune --all --volumes --force
