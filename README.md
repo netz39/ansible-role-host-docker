@@ -95,6 +95,11 @@ You can go with just the defaults.
     * Default: *empty*
     * Description: Enable IPv6 for the docker default network and set
       the given CIDR.
+* `docker_log_max_size`:
+    * Default: *100m*
+    * Description: Set the maximum size of a single log file.
+      See [Configure logging drivers](https://docs.docker.com/config/containers/logging/configure/)
+      in docker documentation for details.
 
 ## Dependencies
 
