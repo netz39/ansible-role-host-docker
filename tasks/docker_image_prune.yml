@@ -2,16 +2,16 @@
 # SPDX-License-Identifier: MIT
 ---
 
-- name: Install Docker image-prune systemd unit, if enabled
+- name: Copy docker-image-prune.service file
+  ansible.builtin.copy:
+    src: files/docker-image-prune.service
+    dest: /etc/systemd/system/docker-image-prune.service
+    mode: "0644"
+  notify: Reload systemd
+
+- name: Install Docker image-prune timer unit, if enabled
   when: docker_image_prune
   block:
-    - name: Copy docker-image-prune.service file
-      ansible.builtin.copy:
-        src: files/docker-image-prune.service
-        dest: /etc/systemd/system/docker-image-prune.service
-        mode: "0644"
-      notify: Reload systemd
-
     - name: Copy docker-image-prune.timer file
       ansible.builtin.copy:
         src: files/docker-image-prune.timer
