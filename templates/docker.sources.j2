@@ -1,0 +1,7 @@
+{# SPDX-FileCopyrightText: 2025 Stefan Haun <tux@netz39.de> #}
+{# SPDX-License-Identifier: CC0-1.0 #}
+Types: deb
+URIs: {{ docker_apt_uri }}
+Suites: {{ ansible_distribution_release }}
+Components: stable
+Signed-By: {{ docker_apt_keyrings_dir }}/docker.asc
