@@ -26,7 +26,18 @@
         (ansible_python_version is version('3.12', '>=')) and
         (docker_apt_key_url is match('https://'))
 
-- include_tasks: apt_source_setup_legacy.yml
+- name: Determine Trixie-style APT setup
+  ansible.builtin.set_fact:
+    # Debian Trixie has release number 13.
+    trixie_setup: "{{ ansible_distribution == 'Debian' and ansible_distribution_major_version | int >= 13 }}"
+
+- name: Include tasks for setting up APT sources (Trixie)
+  ansible.builtin.include_tasks: apt_source_setup_trixie.yml
+  when: trixie_setup
+
+- name: Include tasks for setting up APT sources (legacy)
+  ansible.builtin.include_tasks: apt_source_setup_legacy.yml
+  when: not trixie_setup
 
 - name: Install Docker
   ansible.builtin.package:
