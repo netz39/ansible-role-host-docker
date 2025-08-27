@@ -1,0 +1,40 @@
+# SPDX-FileCopyrightText: 2025 Stefan Haun <tux@netz39.de>
+# SPDX-License-Identifier: MIT
+---
+
+- name: Download the Docker APT key
+  block:
+    - name: Ensure apt keyrings dir is present
+      ansible.builtin.file:
+        path: "{{ docker_apt_keyrings_dir }}"
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Put docker apt release key in place
+      ansible.builtin.get_url:
+        url: "{{ docker_apt_key_url }}"
+        dest: "{{ docker_apt_keyrings_dir }}/docker.asc"
+        mode: '0644'
+        backup: true
+        force: true
+      register: apt_repo
+
+- name: Optionally get and check GPG fingerprint of apt key file
+  when: docker_apt_key_fpr is defined   # no need to get the fpr if user does not want to check it anyway
+  block:
+    - name: Get GPG fingerprint of downloaded key file
+      ansible.builtin.shell:
+        cmd: "gpg --with-colons --show-keys '{{ docker_apt_keyrings_dir }}/docker.asc' | grep -A1 '^pub:' | grep '^fpr:' | cut -d: -f10"
+      changed_when: false
+      register: gpg_fpr
+
+    - name: Assert GPG fingerprint of apt key file is the one provided by the user
+      ansible.builtin.assert:
+        that:
+          - not gpg_fpr.failed
+          - gpg_fpr.rc == 0
+          - gpg_fpr.stdout == docker_apt_key_fpr
+        fail_msg: "Docker APT key fingerprint does not match!"
+      when: (gpg_fpr.skipped is not defined) or not gpg_fpr.skipped

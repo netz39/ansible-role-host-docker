@@ -1,0 +1,37 @@
+# SPDX-FileCopyrightText: 2025 Stefan Haun <tux@netz39.de>
+# SPDX-License-Identifier: MIT
+---
+
+- name: Install Docker APT deps
+  ansible.builtin.package:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - apt-transport-https
+      - ca-certificates
+      - gnupg2
+
+# Use import_tasks to gain the ability to register changed status for apt_repo
+
+- name: Include tasks for setting up APT key
+  ansible.builtin.import_tasks: apt_key.yml
+
+# TODO Determine the best way to detect if we need to use the legacy setup
+- name: Determine Deb822-style APT setup
+  ansible.builtin.set_fact:
+    # Debian Trixie has release number 13.
+    deb822_setup: "{{ ansible_distribution == 'Debian' and ansible_distribution_major_version | int >= 13 }}"
+
+- name: Include tasks for setting up APT sources (deb822)
+  ansible.builtin.import_tasks: apt_source_deb822.yml
+  when: deb822_setup
+
+- name: Include tasks for setting up APT sources (legacy)
+  ansible.builtin.import_tasks: apt_source_legacy.yml
+  when: not deb822_setup
+
+- name: Update package cache  # noqa: no-handler
+  ansible.builtin.apt:
+    update_cache: true
+  when: apt_repo.changed
