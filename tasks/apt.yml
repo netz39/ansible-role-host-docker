@@ -11,6 +11,7 @@
       - apt-transport-https
       - ca-certificates
       - gnupg2
+      - python3-standard-pipes
 
 # Use import_tasks to gain the ability to register changed status for apt_repo
 
