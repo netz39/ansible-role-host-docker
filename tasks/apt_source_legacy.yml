@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: 2025 Stefan Haun <tux@netz39.de>
+# SPDX-License-Identifier: MIT
+---
+
+- name: Install software-properties-common for add-apt-repository
+  ansible.builtin.package:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - software-properties-common
+
+- name: Add Docker's APT repository
+  ansible.builtin.template:
+    src: templates/docker.list.j2
+    dest: /etc/apt/sources.list.d/docker.list
+    owner: root
+    group: root
+    mode: '0644'
+  register: apt_repo
+
+# that key was created in 2017 and was still in use in 2024,
+# we most probably need to remove this one key only
+- name: Remove key from deprecated apt-key storage
+  ansible.builtin.apt_key:
+    id: 0x9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+    state: absent
