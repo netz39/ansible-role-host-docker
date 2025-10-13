@@ -12,6 +12,7 @@
       - ca-certificates
       - gnupg2
       - python3-standard-pipes
+      - python3-setuptools
 
 # Link: https://docs.docker.com/engine/install/debian/#install-using-the-repository
 - name: Prepare apt with key and sources entry
