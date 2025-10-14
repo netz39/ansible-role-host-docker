@@ -101,6 +101,10 @@ You can go with just the defaults.
     * Description: Set the maximum size of a single log file.
       See [Configure logging drivers](https://docs.docker.com/config/containers/logging/configure/)
       in docker documentation for details.
+* `docker_default_dns`:
+    * Default: *empty*
+    * Description: List of DNS servers to use as a default for docker
+      containers. If empty, the host's DNS servers are used.
 
 ## Dependencies
 
@@ -136,6 +140,9 @@ Tested with ansible 2.14.18 on Debian GNU/Linux 12 (bookworm).
         docker_data_root: "/srv/docker"
         docker_cron_image_prune: true
         docker_v6_cidr: "2001:db8:1::/64"
+        docker_default_dns:
+          - "192.0.2.1"
+          - "2001:db8::1"
 ```
 
 ## Contributing
