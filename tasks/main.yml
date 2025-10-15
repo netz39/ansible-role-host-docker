@@ -65,4 +65,5 @@
   when: (item.docker is defined) and item.docker
   with_items: "{{ users }}"
 
-- include_tasks: docker_image_prune.yml
+- name: Include tasks for image prune
+  ansible.builtin.include_tasks: docker_image_prune.yml

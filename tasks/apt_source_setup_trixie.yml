@@ -53,7 +53,10 @@
   block:
     - name: Get GPG fingerprint of downloaded key file
       ansible.builtin.shell:
-        cmd: "gpg --with-colons --show-keys '{{ docker_apt_keyrings_dir }}/docker.asc' | grep -A1 '^pub:' | grep '^fpr:' | cut -d: -f10"
+        cmd: |
+          set -o pipefail
+          gpg --with-colons --show-keys '{{ docker_apt_keyrings_dir }}/docker.asc' | grep -A1 '^pub:' | grep '^fpr:' | cut -d: -f10
+        executable: /usr/bin/bash
       changed_when: false
       register: gpg_fpr
 
