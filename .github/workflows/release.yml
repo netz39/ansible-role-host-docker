@@ -3,7 +3,7 @@
 ---
 name: Create Release
 
-on:
+on: # yamllint disable-line rule:truthy
   push:
     tags:
       - 'v*.*.*'
