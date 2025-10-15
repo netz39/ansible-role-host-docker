@@ -4,6 +4,8 @@
 extends: default
 
 rules:
+  empty-lines:
+    max: 3
   line-length: disable
   truthy:
     allowed-values:
