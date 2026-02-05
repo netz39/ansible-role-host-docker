@@ -24,19 +24,3 @@
         name: docker-image-prune.timer
         enabled: yes
         state: started
-
-
-
-# Note: This check can go away in a few releases
-
-- name: Check for old docker image prune cron job
-  ansible.builtin.shell: "crontab -l | grep 'docker image prune --all --force'"
-  register: cron_check
-  ignore_errors: true
-  failed_when: false
-  changed_when: false
-
-- name: Print warning about old cron job
-  ansible.builtin.debug:
-    msg: "Warning: Old docker image prune cron job found. Please remove it manually using 'sudo crontab -e' and delete the line containing 'docker image prune --all --force'."
-  when: cron_check.rc == 0
