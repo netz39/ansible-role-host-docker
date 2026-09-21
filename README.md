@@ -74,6 +74,11 @@ You can go with just the defaults.
       Debian packages from.
       You might want to set this to the address of a local apt proxy
       like *approx*, *apt-cacher* or the like.
+* `docker_apt_architectures`:
+    * Default: *empty*
+    * Description: List of architectures to download packages for.
+      If empty, no architecture restriction is added and APT uses all
+      architectures configured on the system.
 * `docker_image_prune`:
     * Default: `false`
     * Description: Enables a systemd timer to automatically prune Docker
@@ -137,6 +142,8 @@ Tested with ansible 2.14.18 on Debian GNU/Linux 12 (bookworm).
         docker_apt_uri: "http://deb.example.internal:9999/docker"
         docker_apt_key_url: "{{ docker_apt_uri }}/gpg"
         docker_apt_key_fpr: "9DC858229FC7DD38854AE2D88D81803C0EBFCD88"
+        docker_apt_architectures:
+          - "amd64"
         docker_data_root: "/srv/docker"
         docker_cron_image_prune: true
         docker_v6_cidr: "2001:db8:1::/64"
