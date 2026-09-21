@@ -12,4 +12,5 @@ docker_data_root: "/var/lib/docker"
 docker_storage_driver: "overlay2"
 docker_v6_cidr: ""
 docker_log_max_size: "100m"
+docker_log_max_file: "3"
 docker_default_dns: []
