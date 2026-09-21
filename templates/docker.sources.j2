@@ -4,4 +4,8 @@ Types: deb
 URIs: {{ docker_apt_uri }}
 Suites: {{ ansible_distribution_release }}
 Components: stable
+{% if docker_apt_architectures | length > 0 %}
+Architectures: {{ docker_apt_architectures | join(' ') }}
+{% endif %}
 Signed-By: {{ docker_apt_keyrings_dir }}/docker.asc
+
