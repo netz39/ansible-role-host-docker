@@ -111,6 +111,12 @@ You can go with just the defaults.
     * Description: List of DNS servers to use as a default for docker
       containers. If empty, the host's DNS servers are used.
 
+> [!NOTE]
+> Changes to the Docker daemon logging configuration only apply to newly
+> created containers. Existing containers keep the logging options they
+> were created with and must be recreated for updated log retention
+> settings to take effect.
+
 ## Dependencies
 
 No external dependencies.
