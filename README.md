@@ -149,6 +149,8 @@ Tested with ansible 2.14.18 on Debian GNU/Linux 12 (bookworm).
 
 Pull requests accepted.
 
+This project has a grace period of one week after which PRs may be merged without review.
+
 ## License
 
 This project is licensed unter the [MIT License](LICENSES/MIT.txt)
