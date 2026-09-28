@@ -6,11 +6,12 @@
     "fixed-cidr-v6": "{{ docker_v6_cidr }}",
 {% endif %}
     "exec-opts": ["native.cgroupdriver=systemd"],
-    "log-driver": "json-file",
-        "log-opts": {
-            "max-size": "{{ docker_log_max_size }}",
-            "max-file": "{{ docker_log_max_file }}"
-        },
+
+    "log-driver": "{{ docker_log_driver.driver }}",
+    {% if docker_log_driver.options is defined and docker_log_driver.options | length > 0 %}
+    "log-opts": {{ docker_log_driver.options | tojson }},
+    {% endif %}
+
     "data-root": "{{ docker_data_root }}",
     "storage-driver": "{{ docker_storage_driver }}",
     "dns": {{ docker_default_dns | tojson }}

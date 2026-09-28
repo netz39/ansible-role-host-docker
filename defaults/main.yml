@@ -12,6 +12,10 @@ docker_image_prune: false  # enable/disable cronjob for regular automatic image 
 docker_data_root: "/var/lib/docker"
 docker_storage_driver: "overlay2"
 docker_v6_cidr: ""
-docker_log_max_size: "100m"
-docker_log_max_file: "3"
 docker_default_dns: []
+
+docker_log_driver:
+  driver: local
+  options: # Options must match the selected driver's options
+    max-size: "100m"
+    max-file: "3"
