@@ -101,10 +101,21 @@ You can go with just the defaults.
     * Description: Set the maximum size of a single log file.
       See [Configure logging drivers](https://docs.docker.com/config/containers/logging/configure/)
       in docker documentation for details.
+* `docker_log_max_file`:
+    * Default: *3*
+    * Description: Set the maximum number of log files to retain.
+      See [Configure logging drivers](https://docs.docker.com/config/containers/logging/configure/)
+      in docker documentation for details.
 * `docker_default_dns`:
     * Default: *empty*
     * Description: List of DNS servers to use as a default for docker
       containers. If empty, the host's DNS servers are used.
+
+> [!NOTE]
+> Changes to the Docker daemon logging configuration only apply to newly
+> created containers. Existing containers keep the logging options they
+> were created with and must be recreated for updated log retention
+> settings to take effect.
 
 ## Dependencies
 
