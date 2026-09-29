@@ -101,16 +101,29 @@ You can go with just the defaults.
     * Default: *empty*
     * Description: Enable IPv6 for the docker default network and set
       the given CIDR.
-* `docker_log_max_size`:
-    * Default: *100m*
-    * Description: Set the maximum size of a single log file.
+* `docker_log_driver`:
+    * Default:
+      ```yaml
+      driver: local
+      options:
+        max-size: "100m"
+        max-file: "3"
+      ```
+    * Description: Configure the Docker logging driver and its options.
+      The `options` mapping is passed directly to Docker as `log-opts`
+      and must contain options supported by the selected logging driver.
+      The `options` key is optional.
+
+      For example, to use the `journald` logging driver without additional
+      options:
+      ```yaml
+      docker_log_driver:
+        driver: journald
+      ```
+
       See [Configure logging drivers](https://docs.docker.com/config/containers/logging/configure/)
-      in docker documentation for details.
-* `docker_log_max_file`:
-    * Default: *3*
-    * Description: Set the maximum number of log files to retain.
-      See [Configure logging drivers](https://docs.docker.com/config/containers/logging/configure/)
-      in docker documentation for details.
+      in Docker documentation for available logging drivers and their
+      supported options.
 * `docker_default_dns`:
     * Default: *empty*
     * Description: List of DNS servers to use as a default for docker
@@ -119,8 +132,8 @@ You can go with just the defaults.
 > [!NOTE]
 > Changes to the Docker daemon logging configuration only apply to newly
 > created containers. Existing containers keep the logging options they
-> were created with and must be recreated for updated log retention
-> settings to take effect.
+> were created with and must be recreated for updated logging settings
+> to take effect.
 
 ## Dependencies
 
@@ -161,6 +174,8 @@ Tested with ansible 2.14.18 on Debian GNU/Linux 12 (bookworm).
         docker_default_dns:
           - "192.0.2.1"
           - "2001:db8::1"
+        docker_log_driver:
+          driver: journald
 ```
 
 ## Contributing
