@@ -1,0 +1,100 @@
+# SPDX-FileCopyrightText: 2026 Netz39 Administrators <admin@netz39.de>
+# SPDX-License-Identifier: MIT
+---
+# Link: https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_reuse_roles.html#role-argument-validation
+
+argument_specs:
+  # roles/netz39.host_docker/tasks/main.yml entry point
+  main:
+    short_description: Set up Docker on your host
+    author:
+      - Netz39 Administrators
+    options:
+      docker_apt_architectures:
+        type: list
+        elements: str
+        description:
+          - List of architectures to download packages for.
+          - If empty, no architecture restriction is added and APT uses
+            all architectures configured on the system.
+
+      docker_apt_key_fpr:
+        type: str
+        description:
+          - Set the fingerprint of the debian repo signing key here to
+            notice signing key changes.
+
+      docker_apt_key_url:
+        type: str
+        description:
+          - Address to download the OpenPGP key, which is used to sign
+            the third party apt repo.
+
+      docker_apt_keyrings_dir:
+        type: str
+        description:
+          - Directory to put the downloaded OpenPGP file into.
+          - Default is Debian standard path for such keys.
+            Can be left on default in almost all cases.
+
+      docker_apt_uri:
+        type: str
+        description:
+          - Address of the third party apt repo to download Debian
+            packages from.
+          - You might want to set this to the address of a local apt
+            proxy like *approx*, *apt-cacher* or the like.
+
+      docker_data_root:
+        type: str
+        description:
+          - Persistent data directory where docker puts containers,
+            images, volumes, etc.
+          - See [Daemon data directory](https://docs.docker.com/engine/daemon/#daemon-data-directory)
+            in docker documentation for details.
+          - Often set to a separate volume which is not the root volume
+            of the machine docker is installed to.
+
+      docker_default_dns:
+        type: list
+        elements: str
+        description:
+          - List of DNS servers to use as a default for docker
+            containers.
+          - If empty, the host's DNS servers are used.
+
+      docker_image_prune:
+        type: bool
+        description:
+          - Enables a systemd timer to automatically prune Docker images
+            without container references.
+          - You can check the timer with
+            `sudo systemctl list-timers --all` and the results with
+            `sudo journalctl -xeu docker-image-prune`.
+
+      docker_log_driver:
+        type: dict
+        description:
+          - Configure the Docker logging driver and its options.
+        options:
+          driver:
+            type: str
+            required: true
+            description:
+              - Maps to 'log-driver' in daemon.json config file.
+          options:  # the docker_log_driver dict element, not the argument specs key
+            type: dict
+            description:
+              - Maps to 'log-opts' and must contain options supported by
+                the selected logging driver.
+
+      docker_storage_driver:
+        type: str
+        description:
+          - See [Select a storage driver](https://docs.docker.com/engine/storage/drivers/select-storage-driver/)
+            in docker documentation for detailed description.
+
+      docker_v6_cidr:
+        type: str
+        description:
+          - Enable IPv6 for the docker default network and set the given CIDR.
