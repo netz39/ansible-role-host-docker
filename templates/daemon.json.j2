@@ -8,9 +8,9 @@
     "exec-opts": ["native.cgroupdriver=systemd"],
 
     "log-driver": "{{ docker_log_driver.driver }}",
-    {% if docker_log_driver.options is defined and docker_log_driver.options | length > 0 %}
+{% if docker_log_driver.options is defined and docker_log_driver.options | length > 0 %}
     "log-opts": {{ docker_log_driver.options | tojson }},
-    {% endif %}
+{% endif %}
 
     "data-root": "{{ docker_data_root }}",
     "storage-driver": "{{ docker_storage_driver }}",
